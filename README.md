@@ -28,15 +28,17 @@ jobs:
           readme: "docs/README.md"
           theme: "auto"
       - uses: actions/deploy-pages@v4
+        id: deployment
 ```
 
 ## Inputs
 
-| Input         | Description                                  | Required | Default         |
-| ------------- | -------------------------------------------- | -------- | --------------- |
-| `readme`      | Path to the README file                      | No       | `README.md`     |
-| `theme`       | Theme for the page (`light`, `dark`, `auto`) | No       | `light`         |
-| `title`       | Title for the HTML page                      | No       | Repository name |
+| Input    | Description                                   | Required | Default                                                                 |
+|----------|-----------------------------------------------|----------|-------------------------------------------------------------------------|
+| `readme` | Path to the README file                       | No       | `README.md`                                                             |
+| `style`  | CSS style for the body element                | No       | `min-width:200px;max-width:980px;margin:0 auto !important;padding:45px` |
+| `theme`  | Theme for the page (`light`, `dark`, `auto`)  | No       | `auto`                                                                  |
+| `title`  | Title for the HTML page                       | No       | Repository name                                                         |
 
 ## Setup
 

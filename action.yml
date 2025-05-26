@@ -7,6 +7,10 @@ inputs:
     description: "Path to the README file"
     required: false
     default: "README.md"
+  style:
+    description: "CSS style for the body"
+    required: false
+    default: "min-width:200px;max-width:980px;margin:0 auto !important;padding:45px"
   theme:
     description: "Theme for the page (light, dark, or auto)"
     required: false
@@ -16,7 +20,6 @@ inputs:
     required: false
     default: "${{ github.event.repository.name }}"
 
-
 runs:
   using: "composite"
   steps:
@@ -25,21 +28,19 @@ runs:
       run: |
         case "${{ inputs.theme }}" in
           "light")
-            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-light.css"></head><body><div class="markdown-body">' > index.html
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-light.css"><style>body{${{ inputs.style }}}</style></head><body class="markdown-body">' > index.html
             ;;
           "dark")
-            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-dark.css"></head><body><div class="markdown-body">' > index.html
-
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-dark.css"><style>body{${{ inputs.style }}}</style></head><body class="markdown-body">' > index.html
             ;;
           *)
-            echo "Unknown theme: ${{ inputs.theme }}. Using light theme."
-            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown.css"></head><body><div class="markdown-body">' > index.html
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown.css"><style>body{${{ inputs.style }}}</style></head><body class="markdown-body">' > index.html
             ;;
         esac
 
         npx marked "${{ inputs.readme }}" >> index.html
 
-        echo '</div></body></html>' >> index.html
+        echo '</body></html>' >> index.html
 
     - name: Upload pages artifact
       uses: actions/upload-pages-artifact@v3
