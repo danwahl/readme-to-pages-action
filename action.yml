@@ -1,0 +1,51 @@
+name: "Deploy README to GitHub Pages"
+description: "Converts a README file to HTML and deploys it to GitHub Pages"
+author: "Dan Wahl"
+
+inputs:
+  readme:
+    description: "Path to the README file"
+    required: false
+    default: "README.md"
+  theme:
+    description: "Theme for the page (light, dark, or auto)"
+    required: false
+    default: "auto"
+  title:
+    description: "Title for the HTML page"
+    required: false
+    default: "${{ github.event.repository.name }}"
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build README page
+      shell: bash
+      run: |
+        case "${{ inputs.theme }}" in
+          "light")
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-light.css"></head><body><div class="markdown-body">' > index.html
+            ;;
+          "dark")
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-dark.css"></head><body><div class="markdown-body">' > index.html
+
+            ;;
+          *)
+            echo "Unknown theme: ${{ inputs.theme }}. Using light theme."
+            echo '<!DOCTYPE html><html><head><title>${{ inputs.title }}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown.css"></head><body><div class="markdown-body">' > index.html
+            ;;
+        esac
+
+        npx marked "${{ inputs.readme }}" >> index.html
+
+        echo '</div></body></html>' >> index.html
+
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: .
+
+branding:
+  icon: "file-text"
+  color: "green"
