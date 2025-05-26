@@ -2,6 +2,9 @@
 
 A simple GitHub Action that converts your README file to HTML and deploys it to GitHub Pages.
 
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue)](https://github.com/danwahl/readme-to-pages-action)
+[![Visit Website](https://img.shields.io/badge/Visit-Website-green)](https://danwahl.github.io/readme-to-pages-action/)
+
 ## Usage
 
 ```yaml
